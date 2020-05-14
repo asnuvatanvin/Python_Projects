@@ -6,6 +6,8 @@ client = wolframalpha.Client("5J4UJ4-8837G33QXP")
 
 import PySimpleGUI as sg
 
+import speech_recognition as sr
+
 sg.theme('DarkBlue')
 # All the stuff inside your window.
 layout = [[sg.Text('                                       Hi I am your Virtual Assistant')],
@@ -27,13 +29,27 @@ while True:
         l=res.split()
         if l[0]=="what" or l[0]=='who' or l[0]=="which" or l[0]=="where" or l[0]=="when":
             res=" ".join(l[2:]) 
-        page_py = wiki_wiki.page(res)
-        if page_py.exists():
+        try:
+            page_py = wiki_wiki.page(res)
             ans=page_py.summary
             ans=ans.split('\n')
-            sg.Popup(ans[0])
-        else:
+            if(len(ans[0])<50):
+                res = client.query(values[0])
+                cnt=0
+                count=len(res)
+                for pod in res.pods:
+                    cnt=cnt+1
+                    if cnt==count-1:
+                        sg.Popup(pod.text)
+            else:
+                sg.Popup(ans[0])
+        except:
             res = client.query(values[0])
-            sg.Popup(next(res.results).text)
+            cnt=0
+            count=len(res)
+            for pod in res.pods:
+                cnt=cnt+1
+                if cnt==count-1:
+                    sg.Popup(pod.text)
                   
 window.close()
