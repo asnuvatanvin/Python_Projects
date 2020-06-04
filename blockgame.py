@@ -18,6 +18,7 @@ red = (255, 0, 4)
 blue = (12, 108, 242)
 yellow = (255, 255, 0)
 green = (0, 255, 0)
+white = (255, 255, 255)
 
 rect_size = 50
 
@@ -129,6 +130,7 @@ while not game_over:
 
 	if collision_checker(player_pos,enemy_list):
 		game_over = True
+		break
 
 	draw_enemy(enemy_list)
 	
@@ -140,17 +142,31 @@ while not game_over:
 
 exit = False
 
+# result screen
 while not exit:
 	screen.fill(background_color)
 	for event in pygame.event.get():
 		if event.type ==  pygame.QUIT:
 			sys.exit()
-	text1 = "GAME OVER"
-	label = myfont.render(text1,1,green)
-	screen.blit(label,(width-530,length-340))
+
+	text = "GAME OVER"
+	label = myfont.render(text,1,green)
+	screen.blit(label,(width-540,length-380))
+
 	text = "SCORE: " + str(score)
 	label = myfont.render(text,1,yellow)
-	screen.blit(label, (width-530,length-300))
+	screen.blit(label, (width-530,length-340))
+
+	text = "Press Enter to Exit"
+	label = myfont.render(text,1,white)
+	screen.blit(label,(width-620,length-300))
+
 	pygame.display.update()
+	
+	if event.type in (pygame.KEYDOWN, pygame.KEYUP):
+		key = pygame.key.name(event.key)
+	if event.type == pygame.KEYDOWN:
+		if key=="return":
+			sys.exit()
 
 
